@@ -3,6 +3,7 @@ import {Todo} from '../model/todo'
 
 const router = Router();
 
+type requestBody = {text: string; todoID: string}
 const todos :Todo[] = []
 
 router.get('/', (req,res, next)=>{
@@ -20,7 +21,8 @@ router.post('/', (req,res)=>{
 })
 
 router.post("/delete", (req,res)=>{
-    const todoID = req.body.todoID;
+    const body = req.body as requestBody
+    const todoID = body.todoID
     const todoIndex = todos.findIndex(todo=>todo.id==todoID)
     if(todoIndex>=0){
         todos.splice(todoIndex,1);
@@ -32,10 +34,11 @@ router.post("/delete", (req,res)=>{
 })
 
 router.post('/update', (req,res)=>{
-    const todoID = req.body.todoID
+    const body = req.body as requestBody
+    const todoID = body.todoID
     const todoIndex = todos.findIndex(todo=>todo.id==todoID)
         if(todoIndex>=0){
-            todos[todoIndex] = {id : todos[todoIndex].id, text: req.body.text}
+            todos[todoIndex] = {id : todos[todoIndex].id, text: body.text}
             return res.status(201).json({message:"data successfully updated", data: todos})
         }
         else

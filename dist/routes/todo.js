@@ -16,7 +16,8 @@ router.post('/', (req, res) => {
     res.status(201).json({ message: "Successfully Added" });
 });
 router.post("/delete", (req, res) => {
-    const todoID = req.body.todoID;
+    const body = req.body;
+    const todoID = body.todoID;
     const todoIndex = todos.findIndex(todo => todo.id == todoID);
     if (todoIndex >= 0) {
         todos.splice(todoIndex, 1);
@@ -24,16 +25,17 @@ router.post("/delete", (req, res) => {
     }
     else
         // todos.splice(todos.findIndex(todo=>todo.id==todoID) ,1)
-        res.status(401).json({ message: "ID not found", data: todos });
+        res.status(404).json({ message: "Item not found", data: todos });
 });
 router.post('/update', (req, res) => {
-    const todoID = req.body.todoID;
+    const body = req.body;
+    const todoID = body.todoID;
     const todoIndex = todos.findIndex(todo => todo.id == todoID);
     if (todoIndex >= 0) {
-        todos[todoIndex] = { id: todos[todoIndex].id, text: req.body.text };
+        todos[todoIndex] = { id: todos[todoIndex].id, text: body.text };
         return res.status(201).json({ message: "data successfully updated", data: todos });
     }
     else
-        return res.status(400).json({ message: "Id not found" });
+        return res.status(404).json({ message: "Item not found" });
 });
 exports.default = router;
